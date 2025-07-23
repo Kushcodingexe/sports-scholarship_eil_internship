@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Enable CORS with more permissive settings for development
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8081', 'http://localhost:8080','http://127.0.0.1:8081'],
+  origin: ['https://sports-scholarship-eil-internship-h0xun71gl.vercel.app','http://localhost:5173', 'http://127.0.0.1:5173', 'http://localhost:8081', 'http://localhost:8080','http://127.0.0.1:8081'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
