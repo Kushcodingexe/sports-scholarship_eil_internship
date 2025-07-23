@@ -28,7 +28,7 @@ api.interceptors.request.use(
 // Check if the server is running
 const checkServerStatus = async () => {
   try {
-    const response = await fetch('http://localhost:7777/', { 
+    const response = await fetch('https://sports-scholarshipeilinternship-production-076f.up.railway.app', { 
       method: 'GET',
       timeout: 2000,
       headers: {
