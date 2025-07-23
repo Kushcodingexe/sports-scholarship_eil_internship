@@ -207,8 +207,8 @@ const StatusHistoryDashboard = () => {
       <header style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#000000" }}>Status History Dashboard</h1>
-            <p style={{ color: "#1f2937" }}>View application status change history</p>
+            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#fbf8f8ff" }}>Status History Dashboard</h1>
+            <p style={{ color: "#feffffff" }}>View application status change history</p>
           </div>
           <nav>
             <Link to="/admin" style={{ marginRight: "20px", textDecoration: "none", color: "#1d4ed8", fontWeight: "bold" }}>
