@@ -1,7 +1,7 @@
 ﻿import axios from 'axios';
 
 // Try multiple possible server URLs
-const API_URLS = [
+const API_URLS = ['https://sports-scholarshipeilinternship-production-076f.up.railway.app/api/auth',
   'http://localhost:7777/api/auth',
   'http://127.0.0.1:7777/api/auth'
 ];
@@ -12,7 +12,7 @@ async function findWorkingServer() {
     try {
       console.log(`Testing connection to: ${url}`);
       // Use a simple GET request with CORS mode set explicitly
-      const response = await fetch(url.replace('/api/auth', '/health'), { 
+      const response = await fetch(url.replace('/api/auth', '/'), { 
         mode: 'cors',
         method: 'GET',
         headers: {
