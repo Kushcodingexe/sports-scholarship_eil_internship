@@ -1,0 +1,78 @@
+[
+  {
+    "_id": "1",
+    "applicationId": "APP001",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "mobile": "+91 9876543211",
+    "engineeringField": "Electrical Engineering",
+    "sportsType": "Cricket",
+    "positionLevel": "Batsman",
+    "TournamentDate": "2023-05-15",
+    "status": "pending",
+    "user": "2",
+    "comments": [],
+    "createdAt": "2023-10-15T10:30:00.000Z",
+    "updatedAt": "2023-10-15T10:30:00.000Z"
+  },
+  {
+    "_id": "2",
+    "applicationId": "APP002",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "mobile": "+91 9876543212",
+    "engineeringField": "Mechanical Engineering",
+    "sportsType": "Tennis",
+    "positionLevel": "Singles",
+    "TournamentDate": "2023-07-20",
+    "status": "under_review",
+    "user": "3",
+    "comments": [],
+    "createdAt": "2023-11-10T14:45:00.000Z",
+    "updatedAt": "2023-11-10T14:45:00.000Z"
+  },
+  {
+    "_id": "3",
+    "applicationId": "APP003",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "mobile": "+91 9876543211",
+    "engineeringField": "Electrical Engineering",
+    "sportsType": "Football",
+    "positionLevel": "Forward",
+    "TournamentDate": "2023-09-05",
+    "status": "approved",
+    "user": "2",
+    "comments": [
+      {
+        "content": "Application approved based on excellent sports records",
+        "actionType": "approve",
+        "date": "2023-12-01T11:20:00.000Z"
+      }
+    ],
+    "createdAt": "2023-11-25T09:15:00.000Z",
+    "updatedAt": "2023-12-01T11:20:00.000Z"
+  },
+  {
+    "_id": "4",
+    "applicationId": "APP004",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "mobile": "+91 9876543212",
+    "engineeringField": "Mechanical Engineering",
+    "sportsType": "Badminton",
+    "positionLevel": "Singles",
+    "TournamentDate": "2023-08-12",
+    "status": "rejected",
+    "user": "3",
+    "comments": [
+      {
+        "content": "Insufficient supporting documents provided",
+        "actionType": "reject",
+        "date": "2023-12-15T16:30:00.000Z"
+      }
+    ],
+    "createdAt": "2023-12-05T13:40:00.000Z",
+    "updatedAt": "2023-12-15T16:30:00.000Z"
+  }
+]
