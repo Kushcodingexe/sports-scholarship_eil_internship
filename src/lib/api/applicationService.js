@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // API URL with port 7777 as specified in the backend config.js
-const API_URL = 'https://sports-scholarshipeilinternship-production-076f.up.railway.app/api/applications';
+const API_URL = 'sports-scholarshipeilinternship-production.up.railway.app/api/applications';
 
 // Create axios instance with base config
 const api = axios.create({
@@ -28,7 +28,7 @@ api.interceptors.request.use(
 // Check if the server is running
 const checkServerStatus = async () => {
   try {
-    const response = await fetch('https://sports-scholarshipeilinternship-production-076f.up.railway.app', { 
+    const response = await fetch('sports-scholarshipeilinternship-production.up.railway.app', { 
       method: 'GET',
       timeout: 2000,
       headers: {
