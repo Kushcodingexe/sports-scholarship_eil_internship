@@ -114,7 +114,7 @@ const StatusHistoryDashboard = () => {
           params.append('endDate', filter.endDate);
         }
         
-        const response = await fetch(`http://localhost:7777/api/status-history?${params.toString()}`, {
+        const response = await fetch(`https://sports-scholarshipeilinternship-production.up.railway.app/api/status-history?${params.toString()}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
