@@ -9,20 +9,59 @@ interface Application {
   _id: string;
   applicationId?: string;
   name: string;
+  // Basic Information fields
+  title?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  fatherName?: string;
+  motherName?: string;
+  dateOfBirth?: string;
+  email?: string;
+  mobile?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  nationalId?: string;
+  // Academic Information fields
+  highestExamPassed?: string;
+  yearOfPassing?: string;
+  schoolUniversityName?: string;
+  institution?: string;
+  institutionType?: string;
+  scholarshipCategory?: string;
+  // Sports fields
+  engineeringField?: string;
+  typeOfSports?: string;
   sportsType?: string;
+  SportsName?: string;
   sport?: string;
+  positionLevel?: string;
+  resultMetrics?: string;
+  TournamentDate?: string;
+  // Status and metadata
   status: string;
+  documents?: Array<{
+    fileName: string;
+    originalName: string;
+    fileType: string;
+    fileSize: number;
+    path: string;
+    documentType: string;
+    uploadDate: string;
+  }>;
   comments?: Array<{
     content: string;
     date: string;
     actionType: string;
   }>;
-  email?: string;
-  mobile?: string;
-  engineeringField?: string;
-  positionLevel?: string;
-  TournamentDate?: string;
-  // Add other fields as needed
+  user?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  createdAtFormatted?: string;
+  updatedAtFormatted?: string;
 }
 
 interface Notification {
@@ -612,87 +651,248 @@ const SimpleAdminDashboard = () => {
                       <tr style={{ backgroundColor: "#f9fafb" }}>
                         <td colSpan={6} style={{ padding: "20px" }}>
                           <div style={{ 
-                            display: "grid", 
-                            gridTemplateColumns: "1fr 1fr", 
-                            gap: "20px",
                             border: "1px solid #e5e7eb",
                             borderRadius: "8px",
                             overflow: "hidden",
-                            backgroundColor: "white"
+                            backgroundColor: "white",
+                            boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
                           }}>
-                            <div style={{ padding: "20px", borderRight: "1px solid #e5e7eb" }}>
-                              <h3 style={{ fontSize: "16px", marginTop: 0, marginBottom: "15px", color: "#000000", fontWeight: "600" }}>Applicant Details</h3>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}>
-                                <strong style={{ color: "#000000", width: "140px", display: "inline-block", fontWeight: "600" }}>Name:</strong> 
-                                <span style={{ color: "#000000" }}>{app.name}</span>
-                              </p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}>
-                                <strong style={{ color: "#000000", width: "140px", display: "inline-block", fontWeight: "600" }}>Email:</strong> 
-                                <span style={{ color: "#000000" }}>{app.email}</span>
-                              </p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}>
-                                <strong style={{ color: "#000000", width: "140px", display: "inline-block", fontWeight: "600" }}>Mobile:</strong> 
-                                <span style={{ color: "#000000" }}>{app.mobile}</span>
-                              </p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}>
-                                <strong style={{ color: "#000000", width: "140px", display: "inline-block", fontWeight: "600" }}>Engineering Field:</strong> 
-                                <span style={{ color: "#000000" }}>{app.engineeringField}</span>
-                              </p>
+                            {/* Header with application ID and date */}
+                            <div style={{ 
+                              padding: "12px 20px", 
+                              backgroundColor: "#f8fafc", 
+                              borderBottom: "1px solid #e5e7eb",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center"
+                            }}>
+                              <div>
+                                <h3 style={{ fontSize: "16px", margin: 0, color: "#0f172a", fontWeight: "600" }}>
+                                  Application Details: {app.applicationId || app._id.substring(0, 8)}
+                                </h3>
+                              </div>
+                              <div style={{ fontSize: "14px", color: "#64748b" }}>
+                                Submitted: {app.createdAtFormatted || new Date(app.createdAt || "").toLocaleString()}
+                              </div>
                             </div>
-                            <div style={{ padding: "20px" }}>
-                              <h3 style={{ fontSize: "16px", marginTop: 0, marginBottom: "15px", color: "#1f2937", fontWeight: "600" }}>Sports Details</h3>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Sport:</strong> {app.sportsType || app.sport}</p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Position/Level:</strong> {app.positionLevel || 'N/A'}</p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Tournament Date:</strong> {app.TournamentDate || 'N/A'}</p>
-                            </div>
-                            {app.comments && app.comments.length > 0 && (
-                              <div style={{ gridColumn: "span 2", padding: "20px", borderTop: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
-                                <h3 style={{ fontSize: "16px", marginTop: 0, marginBottom: "15px", color: "#1f2937", fontWeight: "600" }}>Comments & History</h3>
-                                <div style={{ maxHeight: "200px", overflowY: "auto", padding: "4px" }}>
-                                  {app.comments.map((comment, index) => (
-                                    <div key={index} style={{ 
-                                      backgroundColor: 
-                                        comment.actionType === 'approve' ? '#ecfdf5' : 
-                                        comment.actionType === 'reject' ? '#fef2f2' : '#f9fafb',
-                                      padding: "12px 15px",
-                                      borderRadius: "8px",
-                                      marginBottom: "10px",
-                                      border: `1px solid ${
-                                        comment.actionType === 'approve' ? '#10b981' : 
-                                        comment.actionType === 'reject' ? '#ef4444' : '#e5e7eb'
-                                      }`
-                                    }}>
-                                      <p style={{ margin: 0, fontSize: "14px", color: "#111827", fontWeight: "400" }}>{comment.content}</p>
-                                      <div style={{ 
-                                        display: "flex", 
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        marginTop: "8px",
-                                        fontSize: "12px",
-                                        color: "#4b5563" // Darker gray for better contrast
-                                      }}>
-                                        <span>{new Date(comment.date).toLocaleString()}</span>
-                                        <span style={{ 
-                                          display: "inline-block",
-                                          padding: "2px 8px",
-                                          borderRadius: "12px",
-                                          backgroundColor: 
-                                            comment.actionType === 'approve' ? '#d1fae5' : 
-                                            comment.actionType === 'reject' ? '#fee2e2' : '#f3f4f6',
-                                          color: 
-                                            comment.actionType === 'approve' ? '#065f46' : 
-                                            comment.actionType === 'reject' ? '#991b1b' : '#111827',
-                                          textTransform: "capitalize",
-                                          fontWeight: "600" // Bolder for better readability
-                                        }}>
-                                          {comment.actionType}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  ))}
+                            
+                            {/* Grid layout for all details */}
+                            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "1px", backgroundColor: "#e5e7eb" }}>
+                              
+                              {/* Personal Information - Spans 4 columns */}
+                              <div style={{ gridColumn: "span 4", padding: "20px", backgroundColor: "white" }}>
+                                <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                  Personal Information
+                                </h3>
+                                
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Full Name:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.title || ''} {app.firstName || ''} {app.middleName || ''} {app.lastName || ''}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Father's Name:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.fatherName || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Mother's Name:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.motherName || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Date of Birth:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.dateOfBirth || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Email:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.email || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Mobile:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.mobile || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>National ID:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.nationalId || 'Not provided'}</span>
+                                  </div>
                                 </div>
                               </div>
-                            )}
+                              
+                              {/* Address Information - Spans 4 columns */}
+                              <div style={{ gridColumn: "span 4", padding: "20px", backgroundColor: "white" }}>
+                                <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                  Address Information
+                                </h3>
+                                
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Address Line 1:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.addressLine1 || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Address Line 2:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.addressLine2 || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>City:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.city || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>State:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.state || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Postal Code:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.postalCode || 'Not provided'}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Academic Information - Spans 4 columns */}
+                              <div style={{ gridColumn: "span 4", padding: "20px", backgroundColor: "white" }}>
+                                <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                  Academic Information
+                                </h3>
+                                
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Engineering Field:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.engineeringField || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Highest Exam:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.highestExamPassed || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Year of Passing:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.yearOfPassing || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Institution:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.institution || app.schoolUniversityName || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Institution Type:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.institutionType || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Scholarship:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.scholarshipCategory || 'Not specified'}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Sports Details - Spans 6 columns */}
+                              <div style={{ gridColumn: "span 6", padding: "20px", backgroundColor: "white", borderTop: "1px solid #e5e7eb" }}>
+                                <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                  Sports Details
+                                </h3>
+                                
+                                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Sport Type:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.sportsType || app.typeOfSports || app.sport || app.SportsName || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Position/Level:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.positionLevel || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Results Metrics:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.resultMetrics || 'Not provided'}</span>
+                                  </div>
+                                  
+                                  <div style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "8px", alignItems: "baseline" }}>
+                                    <span style={{ fontWeight: "600", color: "#334155", fontSize: "14px" }}>Tournament Date:</span>
+                                    <span style={{ color: "#0f172a", fontSize: "14px" }}>{app.TournamentDate || 'Not provided'}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {/* Documents - Spans 6 columns */}
+                              <div style={{ gridColumn: "span 6", padding: "20px", backgroundColor: "white", borderTop: "1px solid #e5e7eb" }}>
+                                <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                  Documents
+                                </h3>
+                                
+                                {app.documents && app.documents.length > 0 ? (
+                                  <ul style={{ margin: 0, padding: "0 0 0 20px", listStyleType: "disc" }}>
+                                    {app.documents.map((doc, idx) => (
+                                      <li key={idx} style={{ marginBottom: "8px", color: "#0f172a", fontSize: "14px" }}>
+                                        <strong style={{ color: "#334155" }}>{doc.documentType}:</strong> {doc.originalName} 
+                                        <span style={{ fontSize: "12px", color: "#64748b", marginLeft: "8px" }}>
+                                          ({(doc.fileSize / 1024).toFixed(1)} KB)
+                                        </span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>No documents uploaded</p>
+                                )}
+                              </div>
+                              
+                              {/* Comments & History - Spans full width */}
+                              {app.comments && app.comments.length > 0 && (
+                                <div style={{ gridColumn: "span 12", padding: "20px", backgroundColor: "white", borderTop: "1px solid #e5e7eb" }}>
+                                  <h3 style={{ fontSize: "16px", margin: "0 0 16px 0", color: "#0f172a", fontWeight: "600", borderBottom: "1px solid #e5e7eb", paddingBottom: "8px" }}>
+                                    Comments & History
+                                  </h3>
+                                  
+                                  <div style={{ maxHeight: "200px", overflowY: "auto", padding: "4px" }}>
+                                    {app.comments.map((comment, index) => (
+                                      <div key={index} style={{ 
+                                        backgroundColor: 
+                                          comment.actionType === 'approve' ? '#ecfdf5' : 
+                                          comment.actionType === 'reject' ? '#fef2f2' : '#f8fafc',
+                                        padding: "12px 15px",
+                                        borderRadius: "6px",
+                                        marginBottom: "10px",
+                                        border: `1px solid ${
+                                          comment.actionType === 'approve' ? '#10b981' : 
+                                          comment.actionType === 'reject' ? '#ef4444' : '#e2e8f0'
+                                        }`
+                                      }}>
+                                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                                          <span style={{ 
+                                            fontWeight: "600", 
+                                            color: 
+                                              comment.actionType === 'approve' ? '#065f46' : 
+                                              comment.actionType === 'reject' ? '#7f1d1d' : '#334155',
+                                            fontSize: "14px"
+                                          }}>
+                                            {comment.actionType === 'approve' ? 'Approved' : 
+                                             comment.actionType === 'reject' ? 'Rejected' : 'Comment'}
+                                          </span>
+                                          <span style={{ fontSize: "12px", color: "#64748b" }}>
+                                            {new Date(comment.date).toLocaleString()}
+                                          </span>
+                                        </div>
+                                        <p style={{ margin: 0, fontSize: "14px", color: "#0f172a", lineHeight: "1.5" }}>
+                                          {comment.content}
+                                        </p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              
+                            </div>
                           </div>
                         </td>
                       </tr>
