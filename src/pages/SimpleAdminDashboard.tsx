@@ -326,8 +326,8 @@ const SimpleAdminDashboard = () => {
       <header style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#fbfafaff" }}>Admin Dashboard</h1>
-            <p style={{ color: "#fcfcfcff" }}>Manage scholarship applications</p>
+            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#000000" }}>Admin Dashboard</h1>
+            <p style={{ color: "#1f2937" }}>Manage scholarship applications</p>
           </div>
           <nav>
             <Link 
@@ -365,7 +365,7 @@ const SimpleAdminDashboard = () => {
           }}>
             <h2 style={{ 
               fontSize: "18px", 
-              color: "#fbfcfeff", 
+              color: "#111827", 
               fontWeight: "600",
               margin: 0
             }}>Applications Summary</h2>
@@ -641,9 +641,9 @@ const SimpleAdminDashboard = () => {
                             </div>
                             <div style={{ padding: "20px" }}>
                               <h3 style={{ fontSize: "16px", marginTop: 0, marginBottom: "15px", color: "#1f2937", fontWeight: "600" }}>Sports Details</h3>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#4b5563", width: "140px", display: "inline-block" }}>Sport:</strong> {app.sportsType || app.sport}</p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#4b5563", width: "140px", display: "inline-block" }}>Position/Level:</strong> {app.positionLevel || 'N/A'}</p>
-                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#4b5563", width: "140px", display: "inline-block" }}>Tournament Date:</strong> {app.TournamentDate || 'N/A'}</p>
+                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Sport:</strong> {app.sportsType || app.sport}</p>
+                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Position/Level:</strong> {app.positionLevel || 'N/A'}</p>
+                              <p style={{ margin: "8px 0", fontSize: "14px" }}><strong style={{ color: "#000000", width: "140px", display: "inline-block" }}>Tournament Date:</strong> {app.TournamentDate || 'N/A'}</p>
                             </div>
                             {app.comments && app.comments.length > 0 && (
                               <div style={{ gridColumn: "span 2", padding: "20px", borderTop: "1px solid #e5e7eb", backgroundColor: "#f9fafb" }}>
