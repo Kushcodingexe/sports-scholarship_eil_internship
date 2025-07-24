@@ -365,8 +365,8 @@ const SimpleAdminDashboard = () => {
       <header style={{ marginBottom: "20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#000000" }}>Admin Dashboard</h1>
-            <p style={{ color: "#1f2937" }}>Manage scholarship applications</p>
+            <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "white" }}>Admin Dashboard</h1>
+            <p style={{ color: "white" }}>Manage scholarship applications</p>
           </div>
           <nav>
             <Link 
