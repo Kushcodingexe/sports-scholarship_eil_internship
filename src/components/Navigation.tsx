@@ -35,14 +35,14 @@ const Navigation = () => {
     }
   };
 
-  const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/apply", label: "Apply" },
-    { href: "/download", label: "Download" },
-  ];
-
-  // Add admin link only for admin users
-
+  // Only show Apply and Download tabs for non-admin users
+  const navItems = isAdmin
+    ? [{ href: "/", label: "Home" }]
+    : [
+        { href: "/", label: "Home" },
+        { href: "/apply", label: "Apply" },
+        { href: "/download", label: "Download" },
+      ];
 
   const isActiveRoute = (href: string) => {
     if (href === "/") {
@@ -95,22 +95,20 @@ const Navigation = () => {
                   className="flex items-center gap-2"
                 >
                   <User className="h-4 w-4" />
-                  {user.user_metadata?.first_name || user.email?.split("@")[0]}
+                  {user.name || user.email.split("@")[0]}
                   {isAdmin && <ShieldAlert className="h-4 w-4 ml-1 text-purple-600" />}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem disabled>{user.email}</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {/* <DropdownMenuItem asChild>
-                  <Link to="/dashboard">Dashboard</Link>
-                </DropdownMenuItem> */}
-                <DropdownMenuItem asChild>
-                  <Link to="/apply">My Applications</Link>
-                </DropdownMenuItem>
+                {!isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/apply">My Applications</Link>
+                  </DropdownMenuItem>
+                )}
                 {isAdmin && (
                   <>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
                       <Link to="/admin">
                         <ShieldAlert className="h-4 w-4 mr-2" />
@@ -198,6 +196,19 @@ const Navigation = () => {
                       >
                         <ShieldAlert className="h-4 w-4 mr-2" />
                         Admin Dashboard
+                      </Button>
+                    )}
+                    {!isAdmin && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          window.location.href = "/apply";
+                        }}
+                        className="justify-start"
+                      >
+                        My Applications
                       </Button>
                     )}
                     <Button
