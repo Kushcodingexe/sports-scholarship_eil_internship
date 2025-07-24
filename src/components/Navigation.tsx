@@ -37,7 +37,10 @@ const Navigation = () => {
 
   // Only show Apply and Download tabs for non-admin users
   const navItems = isAdmin
-    ? [{ href: "/", label: "Home" }]
+    ? [
+        { href: "/", label: "Home" },
+        { href: "/admin", label: "Admin Dashboard" }
+      ]
     : [
         { href: "/", label: "Home" },
         { href: "/apply", label: "Apply" },
