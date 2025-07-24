@@ -39,7 +39,8 @@ const Navigation = () => {
   const navItems = isAdmin
     ? [
         { href: "/", label: "Home" },
-        { href: "/admin", label: "Admin Dashboard" }
+        { href: "/admin", label: "Admin Dashboard" },
+        { href: "/admin/status-history", label: "Status History" }
       ]
     : [
         { href: "/", label: "Home" },
