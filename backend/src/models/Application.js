@@ -170,9 +170,29 @@ const ApplicationSchema = new mongoose.Schema({
 // Generate a unique application ID before saving
 ApplicationSchema.pre('save', async function(next) {
   if (!this.applicationId) {
-    // Generate a unique ID like APP001, APP002, etc.
-    const count = await this.constructor.countDocuments();
-    this.applicationId = `APP${(count + 1).toString().padStart(3, '0')}`;
+    try {
+      // Find the highest existing application ID
+      const highestApp = await this.constructor.findOne({}, { applicationId: 1 })
+        .sort({ applicationId: -1 })
+        .limit(1);
+      
+      let nextNumber = 1;
+      
+      if (highestApp && highestApp.applicationId) {
+        // Extract the number from the existing highest ID
+        const match = highestApp.applicationId.match(/APP(\d+)/);
+        if (match && match[1]) {
+          nextNumber = parseInt(match[1], 10) + 1;
+        }
+      }
+      
+      // Generate new ID with padded zeros
+      this.applicationId = `APP${nextNumber.toString().padStart(3, '0')}`;
+    } catch (err) {
+      // If there's an error in ID generation, create a timestamp-based fallback
+      const timestamp = Date.now().toString().slice(-6);
+      this.applicationId = `APP${timestamp}`;
+    }
   }
   this.updatedAt = Date.now();
   next();
