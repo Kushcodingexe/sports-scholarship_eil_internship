@@ -21,10 +21,145 @@ import {
   GraduationCap,
   Wrench,
   BookOpen,
+  CheckCircle2,
+  XCircle,
+  Info,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const Index = () => {
+  const [isEligibilityDialogOpen, setIsEligibilityDialogOpen] = useState(false);
+  const [eligibilityFormData, setEligibilityFormData] = useState({
+    institutionType: "",
+    engineeringField: "",
+    sportsType: "",
+    sportsLevel: "",
+    cgpa: "",
+  });
+  const [eligibilityResult, setEligibilityResult] = useState({
+    isEligible: false,
+    message: "",
+    details: "",
+    scholarshipType: "",
+  });
+
+  // Eligibility check form handlers
+  const handleEligibilityChange = (field: string) => (value: string) => {
+    setEligibilityFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleCGPAChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Allow only numbers and decimal point, max 4 chars (e.g., "9.95")
+    if (!/^\d*\.?\d*$/.test(value) || value.length > 4) return;
+    
+    setEligibilityFormData((prev) => ({
+      ...prev,
+      cgpa: value,
+    }));
+  };
+
+  const checkEligibility = () => {
+    const { institutionType, engineeringField, sportsType, sportsLevel, cgpa } = eligibilityFormData;
+    
+    // Validate form
+    if (!institutionType || !engineeringField || !sportsType || !sportsLevel || !cgpa) {
+      setEligibilityResult({
+        isEligible: false,
+        message: "Please fill all the required fields",
+        details: "All fields are required to check your eligibility.",
+        scholarshipType: "",
+      });
+      setIsEligibilityDialogOpen(true);
+      return;
+    }
+
+    // Parse CGPA to number
+    const cgpaNum = parseFloat(cgpa);
+    if (isNaN(cgpaNum) || cgpaNum < 0 || cgpaNum > 10) {
+      setEligibilityResult({
+        isEligible: false,
+        message: "Invalid CGPA",
+        details: "CGPA must be a number between 0 and 10.",
+        scholarshipType: "",
+      });
+      setIsEligibilityDialogOpen(true);
+      return;
+    }
+
+    // Determine eligibility based on criteria
+    let isEligible = true;
+    let message = "Congratulations! You are eligible for the scholarship.";
+    let details = "";
+    let scholarshipType = "";
+
+    // Check minimum CGPA requirements based on institution type
+    let minimumCGPA = 7.0; // Default minimum
+    if (institutionType === "iit" || institutionType === "nit") {
+      minimumCGPA = 7.5;
+    } else if (institutionType === "iiit" || institutionType === "government") {
+      minimumCGPA = 8.0;
+    } else if (institutionType === "private" || institutionType === "deemed" || institutionType === "other") {
+      minimumCGPA = 7.5;
+    }
+
+    // Check if CGPA meets the minimum requirement
+    if (cgpaNum < minimumCGPA) {
+      isEligible = false;
+      message = "Sorry, you are not eligible for the scholarship.";
+      details = `Your CGPA (${cgpaNum}) is below the minimum requirement (${minimumCGPA}) for your institution type.`;
+    } 
+    // If eligible, determine scholarship type
+    else {
+      // Determine scholarship type based on institution
+      if (institutionType === "iit") {
+        scholarshipType = "Premium IIT Scholarship (₹5,00,000 - ₹7,50,000 per year)";
+      } else if (institutionType === "nit") {
+        scholarshipType = "Elite NIT Scholarship (₹3,50,000 - ₹5,00,000 per year)";
+      } else if (institutionType === "iiit" || institutionType === "government") {
+        scholarshipType = "Government Institute Scholarship (₹2,50,000 - ₹3,50,000 per year)";
+      } else {
+        scholarshipType = "Standard Scholarship (₹1,50,000 - ₹2,50,000 per year)";
+      }
+
+      // Extra bonus for national/international level sports
+      if (sportsLevel === "national" || sportsLevel === "international") {
+        details = `You qualify for the ${scholarshipType}. Your ${sportsLevel}-level sports achievement in ${sportsType} gives you priority consideration.`;
+      } else {
+        details = `You qualify for the ${scholarshipType}. We encourage you to highlight your sports achievements in ${sportsType} in your application.`;
+      }
+    }
+
+    setEligibilityResult({
+      isEligible,
+      message,
+      details,
+      scholarshipType,
+    });
+    setIsEligibilityDialogOpen(true);
+  };
+
   const features = [
     {
       icon: Target,
@@ -112,37 +247,225 @@ const Index = () => {
 
       {/* Hero Section */}
       <section
-  className="relative overflow-hidden bg-cover bg-center py-20 lg:py-32"
-  style={{ backgroundImage: "url('https://github.com/Kushcodingexe/sports-scholarship_eil_internship/blob/main/src/pages/edit%20eil%20ggn.jpg?raw=true')" }}
->
-  {/* Dark transparent overlay */}
-  <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
+        className="relative overflow-hidden bg-cover bg-center py-20 lg:py-32"
+        style={{ backgroundImage: "url('https://github.com/Kushcodingexe/sports-scholarship_eil_internship/blob/main/src/pages/edit%20eil%20ggn.jpg?raw=true')" }}
+      >
+        {/* Dark transparent overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-70 z-0" />
 
-  {/* Actual content */}
-  <div className="container relative z-10">
-    <div className="mx-auto max-w-4xl text-center">
-      <h1 className="text-4xl font-bold tracking-tight text-white lg:text-6xl">
-        Sports Excellence Meets
-        <span className="text-primary"> Educational Opportunity</span>
-      </h1>
-      <p className="mt-6 text-lg leading-8 text-white max-w-2xl mx-auto">
-        Engineers India Limited proudly supports exceptional engineering
-        students through comprehensive scholarship programs and career
-        development opportunities.
-      </p>
-      <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
-        <Button
-          asChild
-          size="lg"
-          className="bg-primary hover:bg-primary/90"
-        >
-          {/* Your button code continues here */}
-
+        {/* Actual content */}
+        <div className="container relative z-10">
+          <div className="mx-auto max-w-4xl text-center">
+            <h1 className="text-4xl font-bold tracking-tight text-white lg:text-6xl">
+              Sports Excellence Meets
+              <span className="text-primary"> Educational Opportunity</span>
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-white max-w-2xl mx-auto">
+              Engineers India Limited proudly supports exceptional engineering
+              students through comprehensive scholarship programs and career
+              development opportunities.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
+              <Button
+                asChild
+                size="lg"
+                className="bg-primary hover:bg-primary/90"
+              >
                 <Link to="/apply">
                   Apply for Scholarship <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Eligibility Checker Section */}
+      <section className="py-16 bg-gray-900">
+        <div className="container">
+          <div className="mx-auto max-w-3xl">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-bold tracking-tight lg:text-4xl mb-3">
+                Check Your Eligibility
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Find out if you qualify for our scholarship program before applying.
+              </p>
+            </div>
+            
+            <Card className="border-primary/20">
+              <CardHeader className="bg-primary/10">
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle className="h-5 w-5 text-primary" />
+                  Scholarship Eligibility Checker
+                </CardTitle>
+                <CardDescription>
+                  Fill in the details below to check your scholarship eligibility
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="institutionType">Institution Type *</Label>
+                    <Select onValueChange={handleEligibilityChange("institutionType")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your institution type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="iit">Indian Institute of Technology (IIT)</SelectItem>
+                        <SelectItem value="nit">National Institute of Technology (NIT)</SelectItem>
+                        <SelectItem value="iiit">Indian Institute of Information Technology (IIIT)</SelectItem>
+                        <SelectItem value="government">Government Engineering College</SelectItem>
+                        <SelectItem value="private">Private Engineering College</SelectItem>
+                        <SelectItem value="deemed">Deemed University</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="engineeringField">Engineering Field *</Label>
+                    <Select onValueChange={handleEligibilityChange("engineeringField")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your field" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="computer_science">Computer Science & Engineering</SelectItem>
+                        <SelectItem value="mechanical">Mechanical Engineering</SelectItem>
+                        <SelectItem value="electrical">Electrical Engineering</SelectItem>
+                        <SelectItem value="civil">Civil Engineering</SelectItem>
+                        <SelectItem value="electronics">Electronics & Communication</SelectItem>
+                        <SelectItem value="chemical">Chemical Engineering</SelectItem>
+                        <SelectItem value="aerospace">Aerospace Engineering</SelectItem>
+                        <SelectItem value="biotechnology">Biotechnology</SelectItem>
+                        <SelectItem value="other">Other Engineering Field</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="cgpa">Current CGPA (Out of 10) *</Label>
+                    <Input
+                      value={eligibilityFormData.cgpa}
+                      onChange={handleCGPAChange}
+                      placeholder="e.g., 8.5"
+                      className="max-w-full"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="sportsType">Sports Type *</Label>
+                    <Select onValueChange={handleEligibilityChange("sportsType")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select sports type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cricket">Cricket</SelectItem>
+                        <SelectItem value="football">Football</SelectItem>
+                        <SelectItem value="hockey">Hockey</SelectItem>
+                        <SelectItem value="badminton">Badminton</SelectItem>
+                        <SelectItem value="tennis">Tennis</SelectItem>
+                        <SelectItem value="tabletennis">Table Tennis</SelectItem>
+                        <SelectItem value="basketball">Basketball</SelectItem>
+                        <SelectItem value="athletics">Athletics</SelectItem>
+                        <SelectItem value="swimming">Swimming</SelectItem>
+                        <SelectItem value="chess">Chess</SelectItem>
+                        <SelectItem value="other">Other Sport</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-4 mb-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="sportsLevel">Highest Level of Sports Achievement *</Label>
+                    <Select onValueChange={handleEligibilityChange("sportsLevel")}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your highest achievement level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="institutional">Institutional Level</SelectItem>
+                        <SelectItem value="district">District Level</SelectItem>
+                        <SelectItem value="state">State Level</SelectItem>
+                        <SelectItem value="national">National Level</SelectItem>
+                        <SelectItem value="international">International Level</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center mt-4">
+                  <Button 
+                    onClick={checkEligibility} 
+                    className="w-full md:w-auto bg-primary hover:bg-primary/90"
+                  >
+                    Check Eligibility <CheckCircle2 className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Eligibility Result Dialog */}
+            <Dialog open={isEligibilityDialogOpen} onOpenChange={setIsEligibilityDialogOpen}>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    {eligibilityResult.isEligible ? (
+                      <>
+                        <CheckCircle2 className="h-5 w-5 text-green-500" />
+                        <span>Eligibility Confirmed</span>
+                      </>
+                    ) : (
+                      <>
+                        <Info className="h-5 w-5 text-amber-500" />
+                        <span>Eligibility Result</span>
+                      </>
+                    )}
+                  </DialogTitle>
+                  <DialogDescription>
+                    {eligibilityResult.message}
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="p-4 bg-gray-50 border rounded-md mt-2">
+                  <p className="text-gray-800">{eligibilityResult.details}</p>
+                  
+                  {eligibilityResult.isEligible && (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                      <p className="text-green-800 font-medium">Scholarship Type:</p>
+                      <p className="text-green-700">{eligibilityResult.scholarshipType}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <DialogFooter className="sm:justify-center gap-2 mt-4">
+                  {eligibilityResult.isEligible ? (
+                    <>
+                      <Button asChild variant="default" className="bg-primary hover:bg-primary/90">
+                        <Link to="/apply">
+                          Apply Now <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setIsEligibilityDialogOpen(false)}
+                      >
+                        Close
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      onClick={() => setIsEligibilityDialogOpen(false)}
+                    >
+                      Close
+                    </Button>
+                  )}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </section>
@@ -211,20 +534,20 @@ const Index = () => {
         </div>
       </section>
 
-  {/* CTA Section - EIL Style */}
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-500">
-          <div className="container">
-            <div className="flex items-center justify-between max-w-6xl mx-auto">
-              {/* EIL Logo on the left */}
-              <div className="flex-shrink-0 mr-16">
-                <div className="bg-white rounded-lg p-4 shadow-lg">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F6638b6e3f08849eb91b735b1c7b57266%2F8acc8f463f504829a092660b0a2175c8?format=webp&width=800"
-                    alt="Engineers India Limited Logo"
-                    className="h-20 w-auto object-contain"
-                  />
-                </div>
+      {/* CTA Section - EIL Style */}
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-500">
+        <div className="container">
+          <div className="flex items-center justify-between max-w-6xl mx-auto">
+            {/* EIL Logo on the left */}
+            <div className="flex-shrink-0 mr-16">
+              <div className="bg-white rounded-lg p-4 shadow-lg">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F6638b6e3f08849eb91b735b1c7b57266%2F8acc8f463f504829a092660b0a2175c8?format=webp&width=800"
+                  alt="Engineers India Limited Logo"
+                  className="h-20 w-auto object-contain"
+                />
               </div>
+            </div>
 
             {/* Content on the right */}
             <div className="flex-1 text-center">
