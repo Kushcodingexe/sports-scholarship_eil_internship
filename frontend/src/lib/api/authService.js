@@ -1,7 +1,7 @@
 ﻿import axios from 'axios';
 
 // Try multiple possible server URLs
-const API_URLS = ['https://sports-scholarshipeilinternship-production.up.railway.app/api/auth',
+const API_URLS = ['https://sports-scholarship1-main.vercel.app/api/auth',
   'http://localhost:7777/api/auth',
   'http://127.0.0.1:7777/api/auth',
   
