@@ -40,6 +40,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import applicationService from "@/lib/api/applicationService";
 import { useAuth } from "@/lib/AuthContext";
+import ApplicationStatusNotification from "@/components/ApplicationStatusNotification";
 
 const Apply = () => {
 
@@ -1165,92 +1166,80 @@ const Apply = () => {
     </div>
   );
 
+  // Render function for the entire application form
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
 
       <div className="container py-8">
-        {/* Header */}
+        <h1 className="text-3xl font-bold tracking-tight mb-4">Apply for Scholarship</h1>
+        
+        {/* Application Status Notifications */}
         <div className="mb-8">
-          <Link
-            to="/dashboard"
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Programs
-          </Link>
-          <h1 className="text-3xl font-bold tracking-tight">
-            EIL Scholarship Application
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Complete your application for Engineers India Limited scholarship
-            programs
-          </p>
+          <ApplicationStatusNotification />
         </div>
 
-        {/* Progress Indicator */}
+        {/* Form Progress */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium">Application Progress</span>
-            <span className="text-sm text-muted-foreground">
-              {Math.round(getProgress())}% Complete
+          <div className="flex items-center justify-between text-sm mb-2">
+            <span className="text-muted-foreground">
+              Step {currentStep} of 5
             </span>
+            <span className="font-medium">{Math.round(getProgress())}%</span>
           </div>
           <Progress value={getProgress()} className="h-2" />
-
-          <div className="flex justify-between mt-4">
-            {steps.map((step) => (
-              <div
-                key={step.id}
-                className={`flex flex-col items-center ${currentStep >= step.id ? "text-primary" : "text-muted-foreground"}`}
-              >
-                <div
-                  className={`h-8 w-8 rounded-full flex items-center justify-center ${currentStep >= step.id ? "bg-primary text-white" : "bg-gray-200"}`}
-                >
-                  <step.icon className="h-4 w-4" />
-                </div>
-                <span className="text-xs mt-1 text-center">{step.title}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
-        {/* Form Content */}
-        <div className="max-w-4xl mx-auto">
-          {currentStep === 1 && renderBasicInformation()}
-          {currentStep === 2 && renderAcademicDetails()}
-          {currentStep === 3 && renderSportsAchievements()}
-          {currentStep === 4 && renderDocumentUpload()}
-          {currentStep === 5 && renderReviewSubmit()}
+        {/* Form Step Rendering */}
+        {currentStep === 1 && renderBasicInformation()}
+        {currentStep === 2 && renderAcademicDetails()}
+        {currentStep === 3 && renderSportsAchievements()}
+        {currentStep === 4 && renderDocumentUpload()}
+        {currentStep === 5 && renderReviewSubmit()}
 
-          {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-8">
-            <div className="flex gap-2">
-              {currentStep > 1 && (
-                <Button variant="outline" onClick={prevStep}>
-                  Previous
-                </Button>
-              )}
+        {/* Navigation Buttons */}
+        <div className="flex justify-between mt-8">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={prevStep}
+            disabled={currentStep === 1}
+            className="w-32"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Previous
+          </Button>
+          <div className="space-x-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={saveDraft}
+              className="w-32"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save Draft
+            </Button>
+
+            {currentStep < 5 ? (
               <Button
-                variant="outline"
-                onClick={saveDraft}
-                disabled={isDraftSaved}
+                type="button"
+                onClick={nextStep}
+                className="w-32"
               >
-                <Save className="h-4 w-4 mr-2" />
-                {isDraftSaved ? "Saved!" : "Save Draft"}
+                Next
+                <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
               </Button>
-            </div>
-
-            <div>
-              {currentStep < 5 ? (
-                <Button onClick={nextStep}>Next Step</Button>
-              ) : (
-                <Button onClick={submitApplication} disabled={isSubmitting}>
-                  <Send className="h-4 w-4 mr-2" />
-                  {isSubmitting ? "Submitting..." : "Submit Application"}
-                </Button>
-              )}
-            </div>
+            ) : (
+              <Button
+                type="button"
+                onClick={submitApplication}
+                className="w-32"
+                disabled={isSubmitting || !declarations.agreement || !declarations.terms}
+              >
+                <Send className="h-4 w-4 mr-2" />
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+            )}
           </div>
         </div>
       </div>
