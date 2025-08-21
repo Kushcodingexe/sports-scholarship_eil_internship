@@ -1,4 +1,3 @@
-Here's a **professional README** for your **Sports Scholarship App** built using **Vite, React, and TypeScript**:
 
 ---
 
